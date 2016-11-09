@@ -16,8 +16,11 @@ def get_weather_reply(word)
     uri = URI.parse('http://weather.livedoor.com/forecast/webservice/json/v1?city=130010')
     json = Net::HTTP.get(uri)
     result = JSON.parse(json)
-    today = result[0]
-    return "今日の#{result['today']}は#{today['telop']}だぞ。"
+    today = {}
+    result['forecasts'].each do |forecast|
+        today = forecast if forecast['dateLabel'] == "今日"
+    end
+    return "今日の#{result['title']}は#{today['telop']}だぞ。"
   end
 end
 
