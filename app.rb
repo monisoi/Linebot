@@ -11,8 +11,13 @@ def client
   }
 end
 
-def get_weather_reply(word)
-  if word == "天気"
+def get_weather_reply(message)
+  message_list = message.split(' ')
+  if message_list[0] != "トト"
+    return
+  end
+
+  if message_list[1] == "天気"
     uri = URI.parse('http://weather.livedoor.com/forecast/webservice/json/v1?city=130010')
     json = Net::HTTP.get(uri)
     result = JSON.parse(json)
@@ -20,7 +25,27 @@ def get_weather_reply(word)
     result['forecasts'].each do |forecast|
         today = forecast if forecast['dateLabel'] == "今日"
     end
-    return "今日の#{result['title']}は#{today['telop']}だぞ。"
+
+    weather = "今日の#{result['title']}は#{today['telop']}だぞ。"
+    description = "----------\n#{result['description']['text']}\n----------\n\nだとさ。"
+    min_temp = ""
+    if today['temperature']['min']
+      min_temp = "#{today['temperature']['min']}℃"
+    else
+      min_temp = "知らん"
+    end
+
+    max_temp = ""
+    if today['temperature']['max']
+      max_temp = "#{today['temperature']['max']}℃"
+    else
+      max_temp = "知らん"
+    end
+
+    temperature = "最低気温は#{min_temp}。\n最高気温は#{max_temp}。"
+
+    reply = "#{weather}\n#{temperature}\n\n#{description}"
+    return reply
   end
 end
 
