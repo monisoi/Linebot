@@ -27,7 +27,6 @@ def get_weather_reply(message)
     end
 
     weather = "今日の#{result['title']}は#{today['telop']}だぞ。"
-    description = "----------\n#{result['description']['text']}\n----------\n\nだとさ。"
     min_temp = ""
     if today['temperature']['min']
       min_temp = "#{today['temperature']['min']}℃"
@@ -44,7 +43,7 @@ def get_weather_reply(message)
 
     temperature = "最低気温は#{min_temp}。\n最高気温は#{max_temp}。"
 
-    reply = "#{weather}\n#{temperature}\n\n#{description}"
+    reply = "#{weather}\n#{temperature}"
     return reply
   end
 end
